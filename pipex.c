@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/09 17:30:34 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/06 20:49:18 by astavrop         ###   ########.fr       */
+/*   Created: 2024/02/07 11:16:36 by astavrop          #+#    #+#             */
+/*   Updated: 2024/02/07 16:56:04 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,30 @@
 #include <sys/wait.h>
 #include "./pipex.h"
 
+void	end(t_pipex **data, int code)
+{
+	destroy(data);
+	exit (code);
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	t_pipex		*data;
-	int			pip[2];
-	int			i;
+	int			pipefd[2];
 
-	i = 1;
-	if (check_input(argc, argv) != 0)
-		exit (EXIT_FAILURE);
 	data = init_pipex(env);
-	if (parse_data(argc, argv, &data) != 0)
+	if (check_input(argc, argv, &data) == 1)
 		end(&data, 1);
-	if (parse_args(argc, argv, &data) != 0)
-		end(&data, 2);
-	if (pipe(pip) == -1)
-	{
-		print_error("Pipe failure.", "", "", 32);
-		end(&data, 32);
-	}
-	exec_first(&data, env, pip);
-	exec_last(&data, env, pip);
-	end(&data, data->status);
+	if (parse_fd(argc, argv, &data) == 1)
+		end(&data, 1);
+	if (parse_cmds(argc, argv, &data) == 1)
+		end(&data, 1);
+	if (parse_args(argv, &data) == 1)
+		end(&data, 1);
+	if (pipe(pipefd) == -1)
+		return (printf_error("[main]: Pipe failure.", 1));
+	exec_first(&data, env, pipefd);
+	exec_last(&data, env, pipefd);
+	end (&data, data->status);
 	return (0);
 }

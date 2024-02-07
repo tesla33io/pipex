@@ -1,39 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_input.c                                      :+:      :+:    :+:   */
+/*   checks.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/09 17:40:37 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/06 20:37:12 by astavrop         ###   ########.fr       */
+/*   Created: 2024/02/07 11:19:16 by astavrop          #+#    #+#             */
+/*   Updated: 2024/02/07 12:44:22 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "./pipex.h"
 
-int	print_error(char *msg, char *msg2, char *msg3, int code)
-{
-	ft_printf(STDERR_FILENO, RED S_BOLD "[!] Error: " R
-		RED "%s%s%s" R "\n" R, msg, msg2, msg3);
-	return (code);
-}
-
-int	check_input(int argc, char **argv)
+int	check_input(int argc, char **argv, t_pipex **data)
 {
 	if (argc < 5)
 	{
-		print_error("Wrong input!", "", "", -1);
+		ft_printf(STDERR_FILENO, RED S_BOLD "[Stop programm execution.]\n" R
+			RED "Error (check_input)" R ": invalid input.\n");
 		print_usage();
 		return (1);
 	}
 	if (access(argv[1], F_OK) != 0)
-	{
-		return (print_error("File \'", argv[1],
-				"\' does not exist (INFILE).", -1));
-	}
+		return (print_error(RED "Error (check_input - F_not_OK)" R, -1));
 	if (access(argv[1], R_OK) != 0)
-		return (print_error("Can't read '", argv[1], "' (INFILE).", -1));
+		return (print_error(RED "Error (check_input - R_not_OK)" R, -1));
+	(*data)->is_invalid_infile = false;
 	return (0);
 }

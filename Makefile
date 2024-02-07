@@ -6,7 +6,7 @@
 #    By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/09 17:41:42 by astavrop          #+#    #+#              #
-#    Updated: 2024/02/06 20:55:45 by astavrop         ###   ########.fr        #
+#    Updated: 2024/02/07 15:23:35 by astavrop         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,14 @@ CFLAGS				= -Wall -Werror -Wextra -g
 LIBS				= -L. -lftprintf -lft
 NAME				= pipex
 
-SRCS				= check_input.c pipex.c parse_cmds.c pipex_utils.c clear_data.c \
-						parse_utils.c parse_args.c execute.c
+SRCS				+= args.c
+SRCS				+= checks.c
+SRCS				+= cmd.c
+SRCS				+= error_handling.c
+SRCS				+= execute.c
+SRCS				+= parse_files.c
+SRCS				+= utils.c
+SRCS				+= pipex.c
 OBJS				= $(SRCS:.c=.o)
 
 FT_PINTF_PATH		= ./ft_printf
@@ -40,7 +46,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	@$(MAKE) -s compile-ft-printf
 	@$(MAKE) -s compile-lft
-	@echo "\n\033[32;49;3m> Compiling code...\033[0m"
+	@echo "\n\033[32;49;3m... Compiling code ...\033[0m"
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBS)
 	@echo "\033[32;49;1m>> Done! <<\033[0m"
 
@@ -70,13 +76,13 @@ test: $(NAME) $(INFILE)
 	@echo -n "\033[0m"
 
 compile-ft-printf:
-	@echo "\033[32;49;3m> Making ft_printf...\033[0m"
+	@echo "\033[32;49;3m... Making ft_printf ...\033[0m"
 	@$(MAKE) -C $(FT_PINTF_PATH)
 	@cp $(FT_PINTF_PATH)/$(FT_PINTF_BIN) ./
 	@echo "\033[32;49;1m> ft_printf ready! <\033[0m"
 
 compile-lft:
-	@echo "\n\033[32;49;3m> Making libft...\033[0m"
+	@echo "\n\033[32;49;3m... Making libft ...\033[0m"
 	@$(MAKE) -C $(LFT_PATH)
 	@cp $(LFT_PATH)/$(LFT_BIN) ./
 	@echo "\033[32;49;1m> libft ready! <\033[0m"

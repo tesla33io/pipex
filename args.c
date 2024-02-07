@@ -1,22 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_args.c                                       :+:      :+:    :+:   */
+/*   args.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/17 18:14:57 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/06 20:30:01 by astavrop         ###   ########.fr       */
+/*   Created: 2024/02/07 14:14:14 by astavrop          #+#    #+#             */
+/*   Updated: 2024/02/07 14:22:45 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./pipex.h"
-#include <fcntl.h>
-#include <stdlib.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include "./pipex.h"
 
 // Append to string array
-void	append_tsa(char ****array2D, char ***newRow, int *rowCount)
+int	append_tsa(char ****array2D, char ***newRow, int *rowCount)
 {
 	char	***temp;
 	int		i;
@@ -25,8 +24,8 @@ void	append_tsa(char ****array2D, char ***newRow, int *rowCount)
 	temp = (char ***)malloc((*rowCount) * sizeof(char **));
 	if (temp == NULL)
 	{
-		print_error("Memory allocation error.", "", "", -1);
-		exit(EXIT_FAILURE);
+		return (printf_error(RED"[append_tsa]: Memory allocation failed."R
+				"\n", 1));
 	}
 	i = 0;
 	while (i < (*rowCount) - 1)
@@ -37,28 +36,23 @@ void	append_tsa(char ****array2D, char ***newRow, int *rowCount)
 	temp[*rowCount - 1] = *newRow;
 	free(*array2D);
 	*array2D = temp;
+	return (0);
 }
 
-char	**get_args(int argc, char **argv, t_pipex **data)
+int	parse_args(char **argv, t_pipex **data)
 {
 	int		i;
 	char	**entryv;
 
-	(void)argc;
 	i = 2;
 	while (argv[i + 1])
 	{
 		entryv = ft_split(argv[i], ' ');
 		if (!entryv)
-			return (NULL);
-		append_tsa(&((*data)->cmd_args), &entryv, &((*data)->row_c));
+			return (1);
+		if (append_tsa(&((*data)->cmd_args), &entryv, &((*data)->row_c)) == 1)
+			return (1);
 		i++;
 	}
-	return (argv);
-}
-
-int	parse_args(int argc, char **argv, t_pipex **data)
-{
-	get_args(argc, argv, &(*data));
 	return (0);
 }

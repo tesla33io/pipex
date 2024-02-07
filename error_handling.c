@@ -1,18 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clear_data.c                                       :+:      :+:    :+:   */
+/*   error_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/16 17:55:10 by astavrop          #+#    #+#             */
-/*   Updated: 2024/01/30 10:35:17 by astavrop         ###   ########.fr       */
+/*   Created: 2024/02/07 11:20:00 by astavrop          #+#    #+#             */
+/*   Updated: 2024/02/07 16:42:23 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include "./pipex.h"
+
+int	print_error(char *msg, int code)
+{
+	perror(msg);
+	return (code);
+}
+
+int	printf_error(char *msg, int code)
+{
+	ft_printf(2, msg);
+	return (code);
+}
 
 void	close_fds(t_pipex **data)
 {
@@ -22,46 +35,21 @@ void	close_fds(t_pipex **data)
 		close((*data)->out_fd);
 }
 
-void	list_free(char **lst)
+void	destroy(t_pipex **data)
 {
 	int	i;
 
-	i = 0;
-	while (lst[i])
-		free(lst[i++]);
-	free(lst);
-}
-
-void	d_list_free(char ***d_lst)
-{
-	int	i;
-	int	j;
-
-	if (!d_lst)
-		return ;
-	i = 0;
-	while (d_lst[i])
-	{
-		j = 0;
-		while (d_lst[i][j])
-		{
-			free(d_lst[i][j]);
-			j++;
-		}
-		free(d_lst[i]);
-		i++;
-	}
-	free(d_lst);
-}
-
-void	end(t_pipex **data, int code)
-{
-	close_fds(&(*data));
+	i = -1;
+	close_fds(data);
 	if ((*data)->path)
 		list_free((*data)->path);
-	if ((*data)->cmd_paths)
-		list_free((*data)->cmd_paths);
-	d_list_free((*data)->cmd_args);
+	if ((*data)->cmds)
+		list_free((*data)->cmds);
+	if ((*data)->cmd_args)
+	{
+		while ((*data)->cmd_args[++i])
+			list_free((*data)->cmd_args[i]);
+		free((*data)->cmd_args);
+	}
 	free((*data));
-	exit (code);
 }

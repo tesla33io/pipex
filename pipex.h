@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:47:54 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/06 20:28:16 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/07 16:59:53 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_pipex
 	int			out_fd;
 	t_bool		is_invalid_infile;
 	char		**path;
-	char		**cmd_paths;
+	char		**cmds;
 	char		***cmd_args;
 	int			row_c;
 	int			cmd_count;
@@ -66,41 +66,40 @@ typedef struct s_pip
 	int			out_pipe[2];
 }	t_pip;
 
-// check_input.c
-int				check_input(int argc, char **argv);
-int				print_error(char *msg, char *msg2, char *msg3, int code);
+/* checks */
 
-// parse_cmds
-int				parse_data(int argc, char **argv, t_pipex **data);
+int			check_input(int argc, char **argv, t_pipex **data);
 
-// parse_args
-int				parse_args(int argc, char **argv, t_pipex **data);
+/* error handling */
 
-// parse_utils
-char			*get_bin(char *cmd);
-void			free_cmd_help_staff(char *cmd, char *cmd_path, char *cmds);
-int				return_free(void *ptr, int code);
+int			print_error(char *msg, int code);
+int			printf_error(char *msg, int code);
+void		destroy(t_pipex **data);
 
-// execute
-int				exec_first(t_pipex **data, char **env, int pipefd[2]);
-int				exec_middle(t_pipex **data, int i, char **env, t_pip **pip);
-int				exec_last(t_pipex **data, char **env, int pipefd[2]);
+/* parse files */
 
-// utils
-void			print_usage(void);
-t_pipex			*init_pipex(char **env);
-char			**get_path(char **env);
-char			**append_to_list(char **list, char *str);
+int			parse_fd(int argc, char **argv, t_pipex **data);
 
-// clear_data
-void			end(t_pipex **data, int code);
-void			list_free(char **lst);
+/* parse cmds */
 
-// libft
-void			*ft_memset(void *s, int c, size_t n);
-void			*ft_calloc(size_t nmemb, size_t size);
-char			**ft_split(char const *s, char c);
-char			*ft_strdup(const char *s);
-int				ft_strlen(const char *s);
+int			parse_cmds(int argc, char **argv, t_pipex **data);
+char		*check_cmd(char *cmd, char **paths);
+
+/* parse args */
+
+int			parse_args(char **argv, t_pipex **data);
+
+/* utils */
+
+void		list_free(char **lst);
+char		*get_bin(char *cmd);
+void		print_usage(void);
+t_pipex		*init_pipex(char **env);
+char		**get_path(char **env);
+
+/* execute */
+
+int			exec_first(t_pipex **data, char **env, int pipefd[2]);
+int			exec_last(t_pipex **data, char **env, int pipefd[2]);
 
 #endif // !PIPEX_H
