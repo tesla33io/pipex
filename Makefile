@@ -6,7 +6,7 @@
 #    By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/09 17:41:42 by astavrop          #+#    #+#              #
-#    Updated: 2024/02/08 14:20:01 by astavrop         ###   ########.fr        #
+#    Updated: 2024/02/08 19:55:32 by astavrop         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ $(NAME): $(OBJS) $(LFT_BIN) $(FT_PINTF_BIN)
 	@echo "\033[32;49;1m>>>   Done!   <<<\033[0m          "
 
 $(INFILE):
+	@touch $(INFILE)
 	@echo "\t\tCurtains forcing their will	-\n\
 			against the wind,			-\n\
 			children sleep,				+\n\
