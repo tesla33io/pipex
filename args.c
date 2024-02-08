@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 14:14:14 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/07 14:22:45 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/08 12:19:25 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,7 @@ int	append_tsa(char ****array2D, char ***newRow, int *rowCount)
 				"\n", 1));
 	}
 	i = 0;
-	while (i < (*rowCount) - 1)
-	{
-		temp[i] = (*array2D)[i];
-		i++;
-	}
+	ft_memcpy(temp, *array2D, (*rowCount - 1) * sizeof(char **));
 	temp[*rowCount - 1] = *newRow;
 	free(*array2D);
 	*array2D = temp;

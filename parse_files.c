@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 12:09:49 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/07 12:45:15 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/08 14:48:53 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@ int	parse_fd(int argc, char **argv, t_pipex **data)
 	}
 	(*data)->in_fd = open(argv[1], O_RDONLY);
 	if ((*data)->in_fd < 0)
+	{
+		(*data)->in_fd = open("/dev/null", O_RDONLY);
+		if ((*data)->in_fd < 0)
+		{
+			ft_printf(STDERR_FILENO, RED S_BOLD 
+				"[Stop programm execution.]"R"\n");
+			return (print_error(RED "Error (parse_fd - dev_null)" R, 1));
+		}
 		return (print_error(RED "Error (parse_fd - infile)" R, -1));
+	}
 	return (0);
 }

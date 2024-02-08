@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:16:36 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/07 16:56:04 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/08 14:23:55 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,16 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include "./pipex.h"
+
+void	pend(int pipe[2], t_pipex **data, int code)
+{
+	if (pipe[0] >= 0)
+		close(pipe[0]);
+	if (pipe[1] >= 0)
+		close(pipe[1]);
+	destroy(data);
+	exit (code);
+}
 
 void	end(t_pipex **data, int code)
 {

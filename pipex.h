@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:47:54 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/07 16:59:53 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/08 14:44:51 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@
 # define S_BOLD			"\x1b[1m"
 # define S_ITALIC		"\x1b[3m"
 # define S_UNDERLINE	"\x1b[4m"
+
+# define DEV_NULL "/dev/null"
 
 # include "./libft/libft.h"
 # include "./ft_printf/includes/ft_printf.h"
@@ -75,6 +77,8 @@ int			check_input(int argc, char **argv, t_pipex **data);
 int			print_error(char *msg, int code);
 int			printf_error(char *msg, int code);
 void		destroy(t_pipex **data);
+void		end(t_pipex **data, int code); // in pipex.c
+void		pend(int pipe[2], t_pipex **data, int code); // in pipex.c
 
 /* parse files */
 

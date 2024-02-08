@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:19:16 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/07 12:44:22 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/08 14:46:35 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int	check_input(int argc, char **argv, t_pipex **data)
 		return (1);
 	}
 	if (access(argv[1], F_OK) != 0)
-		return (print_error(RED "Error (check_input - F_not_OK)" R, -1));
+		return (-1);
 	if (access(argv[1], R_OK) != 0)
-		return (print_error(RED "Error (check_input - R_not_OK)" R, -1));
+		return (-1);
 	(*data)->is_invalid_infile = false;
 	return (0);
 }

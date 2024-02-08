@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:20:00 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/07 16:42:23 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/08 14:22:01 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	destroy(t_pipex **data)
 {
 	int	i;
 
-	i = -1;
+	i = 0;
 	close_fds(data);
 	if ((*data)->path)
 		list_free((*data)->path);
@@ -47,8 +47,11 @@ void	destroy(t_pipex **data)
 		list_free((*data)->cmds);
 	if ((*data)->cmd_args)
 	{
-		while ((*data)->cmd_args[++i])
+		while (i < (*data)->row_c)
+		{
 			list_free((*data)->cmd_args[i]);
+			i++;
+		}
 		free((*data)->cmd_args);
 	}
 	free((*data));

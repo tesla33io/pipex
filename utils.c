@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 12:02:23 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/07 16:49:38 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/08 12:51:30 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,14 @@ void	list_free(char **lst)
 {
 	int	i;
 
+	if (!lst || !lst[0])
+		return ;
 	i = 0;
 	while (lst[i])
-		free(lst[i++]);
+	{
+		free(lst[i]);
+		i++;
+	}
 	free(lst);
 }
 

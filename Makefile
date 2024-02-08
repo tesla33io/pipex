@@ -6,7 +6,7 @@
 #    By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/09 17:41:42 by astavrop          #+#    #+#              #
-#    Updated: 2024/02/07 15:23:35 by astavrop         ###   ########.fr        #
+#    Updated: 2024/02/08 14:20:01 by astavrop         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,12 +43,10 @@ all: $(NAME)
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJS)
-	@$(MAKE) -s compile-ft-printf
-	@$(MAKE) -s compile-lft
-	@echo "\n\033[32;49;3m... Compiling code ...\033[0m"
+$(NAME): $(OBJS) $(LFT_BIN) $(FT_PINTF_BIN)
+	@echo -n "\033[32;49;3m... Compiling code ...\033[0m\r"
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBS)
-	@echo "\033[32;49;1m>> Done! <<\033[0m"
+	@echo "\033[32;49;1m>>>   Done!   <<<\033[0m          "
 
 $(INFILE):
 	@echo "\t\tCurtains forcing their will	-\n\
@@ -75,32 +73,34 @@ test: $(NAME) $(INFILE)
 	@cat $(OUTFILE)
 	@echo -n "\033[0m"
 
-compile-ft-printf:
-	@echo "\033[32;49;3m... Making ft_printf ...\033[0m"
-	@$(MAKE) -C $(FT_PINTF_PATH)
+$(FT_PINTF_BIN):
+	@echo -n "\033[32;49;3m... Making ft_printf ...\033[0m\r"
+	@$(MAKE) -sC $(FT_PINTF_PATH)
 	@cp $(FT_PINTF_PATH)/$(FT_PINTF_BIN) ./
-	@echo "\033[32;49;1m> ft_printf ready! <\033[0m"
+	@echo -n "\033[32;49;1m> ft_printf ready! <\033[0m\r"
 
-compile-lft:
-	@echo "\n\033[32;49;3m... Making libft ...\033[0m"
-	@$(MAKE) -C $(LFT_PATH)
+$(LFT_BIN):
+	@echo -n "\033[32;49;3m... Making libft ...\033[0m\r"
+	@$(MAKE) -sC $(LFT_PATH)
 	@cp $(LFT_PATH)/$(LFT_BIN) ./
-	@echo "\033[32;49;1m> libft ready! <\033[0m"
+	@echo -n "\033[32;49;1m> libft ready! <\033[0m\r"
 
 fclean-ft-printf:
-	@cd $(FT_PINTF_PATH) && $(MAKE) fclean
+	@$(MAKE) -sC $(FT_PINTF_PATH) fclean
 	@rm -f $(FT_PINTF_BIN)
 
 fclean-lft:
-	@cd $(LFT_PATH) && $(MAKE) fclean
+	@$(MAKE) -sC $(LFT_PATH) fclean
 	@rm -f $(LFT_BIN)
 
 .PHONY: all clean fclean re compile-ft-printf fclean-ft-printf compile-lft fclean-lft
 
 clean:
-	rm -f $(OBJS)
+	@rm -f $(OBJS)
+	@echo "\033[32;1mObjects cleand!\033[0m"
 
 fclean: clean fclean-ft-printf fclean-lft
-	rm -f $(NAME) $(INFILE) $(OUTFILE)
+	@rm -f $(NAME) $(INFILE) $(OUTFILE)
+	@echo "\033[32;1mEverything cleand!\033[0m"
 
 re: fclean all
