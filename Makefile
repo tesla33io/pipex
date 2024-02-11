@@ -6,7 +6,7 @@
 #    By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/09 17:41:42 by astavrop          #+#    #+#              #
-#    Updated: 2024/02/08 19:55:32 by astavrop         ###   ########.fr        #
+#    Updated: 2024/02/11 19:51:35 by astavrop         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,10 +31,10 @@ FT_PINTF_BIN		= libftprintf.a
 LFT_PATH			= ./libft
 LFT_BIN				= libft.a
 
-INFILE				= infile
+INFILE				= /dev/urandom
 OUTFILE				= outfile
-CMD1				= grep +
-CMD2				= wc -l
+CMD1				= cat
+CMD2				= head -1
 
 all: $(NAME)
 
@@ -47,22 +47,6 @@ $(NAME): $(OBJS) $(LFT_BIN) $(FT_PINTF_BIN)
 	@echo -n "\033[32;49;3m... Compiling code ...\033[0m\r"
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBS)
 	@echo "\033[32;49;1m>>>   Done!   <<<\033[0m          "
-
-$(INFILE):
-	@touch $(INFILE)
-	@echo "\t\tCurtains forcing their will	-\n\
-			against the wind,			-\n\
-			children sleep,				+\n\
-			exchanging dreams with\n\
-			seraphim. The city\n\
-			drags itself awake on		-\n\
-			subway straps; and\n\
-			I, an alarm, awake as a		-\n\
-			rumor of war,				+\n\
-			lie stretching into dawn,\n\
-			unasked and unheeded.		-\n" > $(INFILE)
-	@echo "\033[33;1mCreate `$(INFILE)` with this content:\033[0m"
-	@cat $(INFILE)
 
 test: $(NAME) $(INFILE)
 	@echo "\n\n\033[32;4mPipex test:\033[0m"
@@ -101,7 +85,7 @@ clean:
 	@echo "\033[32;1mObjects cleand!\033[0m"
 
 fclean: clean fclean-ft-printf fclean-lft
-	@rm -f $(NAME) $(INFILE) $(OUTFILE)
+	@rm -f $(NAME) $(OUTFILE)
 	@echo "\033[32;1mEverything cleand!\033[0m"
 
 re: fclean all

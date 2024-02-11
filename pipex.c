@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:16:36 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/08 14:23:55 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/11 20:01:54 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <sys/wait.h>
 #include "./pipex.h"
 
-void	pend(int pipe[2], t_pipex **data, int code)
+int	pend(int pipe[2], t_pipex **data, int code)
 {
 	if (pipe[0] >= 0)
 		close(pipe[0]);
@@ -24,12 +24,14 @@ void	pend(int pipe[2], t_pipex **data, int code)
 		close(pipe[1]);
 	destroy(data);
 	exit (code);
+	return (code);
 }
 
-void	end(t_pipex **data, int code)
+int	end(t_pipex **data, int code)
 {
 	destroy(data);
 	exit (code);
+	return (code);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -50,6 +52,7 @@ int	main(int argc, char **argv, char **env)
 		return (printf_error("[main]: Pipe failure.", 1));
 	exec_first(&data, env, pipefd);
 	exec_last(&data, env, pipefd);
+	// wait(&data->status);
 	end (&data, data->status);
 	return (0);
 }

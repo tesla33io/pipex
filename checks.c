@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:19:16 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/08 14:46:35 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/11 19:48:34 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 int	check_input(int argc, char **argv, t_pipex **data)
 {
-	if (argc < 5)
+	if (argc != 5)
 	{
 		ft_printf(STDERR_FILENO, RED S_BOLD "[Stop programm execution.]\n" R
-			RED "Error (check_input)" R ": invalid input.\n");
+			RED "Error" R ": invalid input.\n");
 		print_usage();
 		return (1);
 	}

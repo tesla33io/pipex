@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 12:02:23 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/08 12:51:30 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/11 19:48:52 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_pipex	*init_pipex(char **env)
 	data->cmd_args = NULL;
 	data->row_c = 0;
 	data->cmd_count = 0;
+	data->status = 0;
 	return (data);
 }
 
@@ -44,7 +45,7 @@ void	print_usage(void)
 		"\t\t- Second command to be executed.\n\n");
 	ft_printf(STDOUT_FILENO, "\n\nHow it looks in "MAGENTA"bash"R":\n\t" );
 	ft_printf(STDOUT_FILENO, GREEN S_BOLD 
-		"< `INFILE` | `CMD1` | `CMD2` > `OUTFILE`" R "\n");
+		"< `INFILE` `CMD1` | `CMD2` > `OUTFILE`" R "\n");
 }
 
 char	**get_path(char **env)

@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 14:25:12 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/08 15:48:44 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/11 20:00:08 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	exec_first(t_pipex **data, char **env, int pipefd[2])
 	{
 		cmd = check_cmd((*data)->cmds[0], (*data)->path);
 		if (!cmd)
-			pend(pipefd, data, EXIT_FAILURE);
+			return (pend(pipefd, data, 127));
 		close(pipefd[0]);
 		dup2(pipefd[1], STDOUT_FILENO);
 		dup2((*data)->in_fd, STDIN_FILENO);
@@ -48,10 +48,7 @@ int	exec_first(t_pipex **data, char **env, int pipefd[2])
 			exit(print_error(RED"Error (exec_first)"R, 1));
 	}
 	else
-	{
 		close(pipefd[1]);
-		waitpid(pid, &(*data)->status, 0);
-	}
 	return (0);
 }
 
@@ -69,16 +66,13 @@ int	exec_last(t_pipex **data, char **env, int pipefd[2])
 	{
 		cmd = check_cmd((*data)->cmds[1], (*data)->path);
 		if (!cmd)
-			pend(pipefd, data, EXIT_FAILURE);
+			return (pend(pipefd, data, 127));
 		dup2(pipefd[0], STDIN_FILENO);
 		dup2((*data)->out_fd, STDOUT_FILENO);
 		if (execve(cmd, (*data)->cmd_args[1], env) == -1)
 			exit (print_error(RED"Error (exec_last)"R, 1));
 	}
 	else
-	{
 		close(pipefd[0]);
-		waitpid(pid, &(*data)->status, 0);
-	}
 	return (0);
 }

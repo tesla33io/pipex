@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:47:54 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/08 14:44:51 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/11 19:59:48 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ int			check_input(int argc, char **argv, t_pipex **data);
 int			print_error(char *msg, int code);
 int			printf_error(char *msg, int code);
 void		destroy(t_pipex **data);
-void		end(t_pipex **data, int code); // in pipex.c
-void		pend(int pipe[2], t_pipex **data, int code); // in pipex.c
+int			end(t_pipex **data, int code); // in pipex.c
+int			pend(int pipe[2], t_pipex **data, int code); // in pipex.c
 
 /* parse files */
 
