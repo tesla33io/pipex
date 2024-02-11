@@ -1,5 +1,5 @@
 <p align="center">
-	<img alt="Static Badge" src="https://img.shields.io/badge/42_Berlin-pipex-purple">
+	<img alt="PIPEX BADGE" src="https://github.com/tesla33io/pipex/blob/main/badge.png?raw=true" width="200">
 </p>
 
 ## Purpose
