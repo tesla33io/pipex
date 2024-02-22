@@ -6,7 +6,7 @@
 /*   By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:47:54 by astavrop          #+#    #+#             */
-/*   Updated: 2024/02/11 19:59:48 by astavrop         ###   ########.fr       */
+/*   Updated: 2024/02/22 20:25:32 by astavrop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@
 
 # define DEV_NULL "/dev/null"
 
-# include "./libft/libft.h"
-# include "./ft_printf/includes/ft_printf.h"
+# include "libft.h"
+# include "ft_printf.h"
 # include <stddef.h>
 
 typedef enum e_bool

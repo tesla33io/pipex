@@ -6,23 +6,25 @@
 #    By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/09 17:41:42 by astavrop          #+#    #+#              #
-#    Updated: 2024/02/11 19:51:35 by astavrop         ###   ########.fr        #
+#    Updated: 2024/02/22 20:25:41 by astavrop         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC					= cc
-CFLAGS				= -Wall -Werror -Wextra -g
+CFLAGS				= -Wall -Werror -Wextra
 LIBS				= -L. -lftprintf -lft
+INCLUDE				= -I./include -I./libft -I./ft_printf/includes
 NAME				= pipex
 
-SRCS				+= args.c
-SRCS				+= checks.c
-SRCS				+= cmd.c
-SRCS				+= error_handling.c
-SRCS				+= execute.c
-SRCS				+= parse_files.c
-SRCS				+= utils.c
-SRCS				+= pipex.c
+SRC_DIR				:= ./src/
+SRCS				+= $(SRC_DIR)checks.c
+SRCS				+= $(SRC_DIR)parsing/args.c
+SRCS				+= $(SRC_DIR)parsing/cmd.c
+SRCS				+= $(SRC_DIR)parsing/parse_files.c
+SRCS				+= $(SRC_DIR)execute.c
+SRCS				+= $(SRC_DIR)utils.c
+SRCS				+= $(SRC_DIR)error_handling.c
+SRCS				+= $(SRC_DIR)pipex.c
 OBJS				= $(SRCS:.c=.o)
 
 FT_PINTF_PATH		= ./ft_printf
@@ -41,11 +43,11 @@ all: $(NAME)
 .DEFAULT_GOAL := all
 
 %.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 $(NAME): $(OBJS) $(LFT_BIN) $(FT_PINTF_BIN)
 	@echo -n "\033[32;49;3m... Compiling code ...\033[0m\r"
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBS)
+	@$(CC) $(CFLAGS) $(INCLUDE) -o $(NAME) $(OBJS) $(LIBS)
 	@echo "\033[32;49;1m>>>   Done!   <<<\033[0m          "
 
 test: $(NAME) $(INFILE)
