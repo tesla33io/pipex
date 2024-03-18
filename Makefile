@@ -1,93 +1,132 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: astavrop <astavrop@student.42berlin.de>    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/01/09 17:41:42 by astavrop          #+#    #+#              #
-#    Updated: 2024/02/22 20:25:41 by astavrop         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+#### MAIN SETTINGS ####
 
-CC					= cc
-CFLAGS				= -Wall -Werror -Wextra
-LIBS				= -L. -lftprintf -lft
-INCLUDE				= -I./include -I./libft -I./ft_printf/includes
-NAME				= pipex
+CC				:= cc
+CFLAGS			:= -Wall -Werror -Wextra -pedantic -O3
+LIBS			:= -Llibft/ -Lft_printf/ -lft -lftprintf 
+INCLUDES		:= -Iinclude/ -Ilibft/ -Ift_printf/includes
 
-SRC_DIR				:= ./src/
-SRCS				+= $(SRC_DIR)checks.c
-SRCS				+= $(SRC_DIR)parsing/args.c
-SRCS				+= $(SRC_DIR)parsing/cmd.c
-SRCS				+= $(SRC_DIR)parsing/parse_files.c
-SRCS				+= $(SRC_DIR)execute.c
-SRCS				+= $(SRC_DIR)utils.c
-SRCS				+= $(SRC_DIR)error_handling.c
-SRCS				+= $(SRC_DIR)pipex.c
-OBJS				= $(SRCS:.c=.o)
+TARGET			:= pipex
 
-FT_PINTF_PATH		= ./ft_printf
-FT_PINTF_BIN		= libftprintf.a
+SRC_DIR			:= src/
+SRC_FILES		+= pipex.c					# Main
+SRC_FILES		+= parsing/args.c			# Parsing
+SRC_FILES		+= parsing/cmd.c			# #
+SRC_FILES		+= parsing/parse_files.c	# #
+SRC_FILES		+= execute.c				# Command execution
+SRC_FILES		+= checks.c					# Input validation
+SRC_FILES		+= utils.c					# Helper functions
+SRC_FILES		+= error_handling.c			# Error management
 
-LFT_PATH			= ./libft
-LFT_BIN				= libft.a
+OBJ_DIR			:= obj/
+OBJ_FILES		:= $(patsubst %.c, $(OBJ_DIR)%.o, $(SRC_FILES))
 
-INFILE				= /dev/urandom
-OUTFILE				= outfile
-CMD1				= cat
-CMD2				= head -1
+DEP_DIR			:= dep/
+DEPENDS			:= $(patsubst %.o, $(DEP_DIR)%.d, $(OBJ_FILES))
+-include $(DEPENDS)
 
-all: $(NAME)
+#### SHELL COMMANDS ####
 
-.DEFAULT_GOAL := all
+RM				:= /bin/rm -f
+MKDIR			:= /bin/mkdir -p
+TOUCH			:= /bin/touch
 
-%.o: %.c
-	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+#### LOCAL LIBRARIES ####
 
-$(NAME): $(OBJS) $(LFT_BIN) $(FT_PINTF_BIN)
-	@echo -n "\033[32;49;3m... Compiling code ...\033[0m\r"
-	@$(CC) $(CFLAGS) $(INCLUDE) -o $(NAME) $(OBJS) $(LIBS)
-	@echo "\033[32;49;1m>>>   Done!   <<<\033[0m          "
+FT_PRINTF_PATH	:= ft_printf/
+FT_PRINTF_LIB	:= $(FT_PRINTF_PATH)libftprintf.a
 
-test: $(NAME) $(INFILE)
-	@echo "\n\n\033[32;4mPipex test:\033[0m"
-	@echo "\t \033[0m\033[35;3m./(NAME) (INFILE) \"(CMD1)\" \"(CMD2)\" (OUTFILE)\033[0m"
-	@echo "\e[33;1mRunning: \033[0m\033[35;3m./$(NAME) $(INFILE) \"$(CMD1)\" \"$(CMD2)\" $(OUTFILE)\033[0m"
-	@./$(NAME) $(INFILE) "$(CMD1)" "$(CMD2)" $(OUTFILE)
-	@echo "\e[33;1mRunning: \033[0m\033[35;3mcat $(OUTFILE)\033[0m"
-	@echo -n "\033[36m"
-	@cat $(OUTFILE)
-	@echo -n "\033[0m"
+LIBFT_PATH		:= libft/
+LIBFT_LIB		:= $(LIBFT_PATH)libft.a
 
-$(FT_PINTF_BIN):
-	@echo -n "\033[32;49;3m... Making ft_printf ...\033[0m\r"
-	@$(MAKE) -sC $(FT_PINTF_PATH)
-	@cp $(FT_PINTF_PATH)/$(FT_PINTF_BIN) ./
-	@echo -n "\033[32;49;1m> ft_printf ready! <\033[0m\r"
+LIB_DEPENDS: $(LIBFT_LIB) $(FT_PRINTF_LIB)
 
-$(LFT_BIN):
-	@echo -n "\033[32;49;3m... Making libft ...\033[0m\r"
-	@$(MAKE) -sC $(LFT_PATH)
-	@cp $(LFT_PATH)/$(LFT_BIN) ./
-	@echo -n "\033[32;49;1m> libft ready! <\033[0m\r"
+#### DEBUG SETTINGS ####
 
-fclean-ft-printf:
-	@$(MAKE) -sC $(FT_PINTF_PATH) fclean
-	@rm -f $(FT_PINTF_BIN)
+ifeq ($(DEBUG), 1)
+	CFLAGS		+= -g3 -O0
+endif
 
-fclean-lft:
-	@$(MAKE) -sC $(LFT_PATH) fclean
-	@rm -f $(LFT_BIN)
+#### TARGET COMPILATION ####
 
-.PHONY: all clean fclean re compile-ft-printf fclean-ft-printf compile-lft fclean-lft
+.DEFAULT_GOAL	:= all
 
-clean:
-	@rm -f $(OBJS)
-	@echo "\033[32;1mObjects cleand!\033[0m"
+all: $(TARGET) ## Build this project
 
-fclean: clean fclean-ft-printf fclean-lft
-	@rm -f $(NAME) $(OUTFILE)
-	@echo "\033[32;1mEverything cleand!\033[0m"
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+	@$(MKDIR) $(@D)
+	@echo "$(CYAN)[build]: $@$(RESET)"
+	@$(CC) $(CFLAGS) -MMD -MF $(patsubst %.o, %.d, $@) $(INCLUDES) -c $< -o $@
 
-re: fclean all
+$(TARGET): $(OBJ_FILES) $(LIBFT_LIB) $(FT_PRINTF_LIB)
+	@echo "$(GREEN)[build]: Link $(TARGET)$(RESET)"
+	@$(CC) $(CFLAGS) -o $(TARGET) $(OBJ_FILES) $(INCLUDES) $(LIBS)
+	@echo "$(GREEN)[info ]: Build finished!$(RESET)"
+	-@echo -n "$(MAGENTA)" && ls -lah $(TARGET) && echo -n "$(RESET)"
+
+#### LOCAL LIBS COMPILATION ####
+
+$(FT_PRINTF_LIB):
+	@$(MAKE) -sC $(FT_PRINTF_PATH)
+
+$(LIBFT_LIB):
+	@$(MAKE) -sC $(LIBFT_PATH)
+
+#### ADDITIONAL RULES ####
+
+clean: ## Clean objects and dependencies
+	@$(RM) $(OBJ_FILES)
+	@$(RM) -r $(OBJ_DIR)
+	@echo "$(YELLOW)[clean ]: Remove objects$(RESET)"
+	@$(RM) $(DEPENDS)
+	@$(RM) -r $(DEP_DIR)
+	@echo "$(YELLOW)[clean ]: Remove dependecies$(RESET)"
+	@(test -s $(FT_PRINTF_LIB) && $(MAKE) -sC $(FT_PRINTF_PATH) clean && \
+		echo "$(YELLOW)[clean ]: Clean \`ft_printf\` lib$(RESET)") || \
+		echo "$(RED)[clean ]: Can't clean \`ft_printf\` lib$(RESET)"
+	@(test -s $(LIBFT_LIB) && $(MAKE) -sC $(LIBFT_PATH) clean && \
+		echo "$(YELLOW)[clean ]: Clean \`libft\` lib$(RESET)") || \
+		echo "$(RED)[clean ]: Can't clean \`libft\` lib$(RESET)"
+
+fclean: clean ## Restore project to initial state
+	@$(RM) $(TARGET)
+	@echo "$(YELLOW)[fclean]: Remove \`$(TARGET)\`$(RESET)"
+	@(test -s $(FT_PRINTF_LIB) && $(MAKE) -sC $(FT_PRINTF_PATH) fclean && \
+		echo "$(YELLOW)[fclean]: Remove \`ft_printf\` lib$(RESET)") || \
+		echo "$(RED)[fclean]: Can't remove \`ft_printf\` lib$(RESET)"
+	@(test -s $(LIBFT_LIB) && $(MAKE) -sC $(LIBFT_PATH) fclean && \
+		echo "$(YELLOW)[fclean]: Remove \`libft\` lib$(RESET)") || \
+		echo "$(RED)[fclean]: Can't remove \`libft\` lib$(RESET)"
+
+re: fclean all ## Rebuild project
+
+help: ## Show help info
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
+		awk 'BEGIN {FS = ":.*?## "}; {printf "$(CYAN)%-30s$(RESET) %s\n", $$1, $$2}'
+
+.PHONY: all re clean fclean help
+
+#### COLORS ####
+# Color codes
+RESET		:= \033[0m
+BOLD		:= \033[1m
+UNDERLINE	:= \033[4m
+
+# Regular colors
+BLACK		:= \033[30m
+RED			:= \033[31m
+GREEN		:= \033[32m
+YELLOW		:= \033[33m
+BLUE		:= \033[34m
+MAGENTA		:= \033[35m
+CYAN		:= \033[36m
+WHITE		:= \033[37m
+
+# Background colors
+BG_BLACK	:= \033[40m
+BG_RED		:= \033[41m
+BG_GREEN	:= \033[42m
+BG_YELLOW	:= \033[43m
+BG_BLUE		:= \033[44m
+BG_MAGENTA	:= \033[45m
+BG_CYAN		:= \033[46m
+BG_WHITE	:= \033[47m
