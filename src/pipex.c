@@ -52,7 +52,6 @@ int	main(int argc, char **argv, char **env)
 		return (printf_error("[main]: Pipe failure.", 1));
 	exec_first(&data, env, pipefd);
 	exec_last(&data, env, pipefd);
-	// wait(&data->status);
 	end (&data, data->status);
 	return (0);
 }
